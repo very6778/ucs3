@@ -4,9 +4,7 @@ import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 const Footer: React.FC = () => {
-  const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || "";
-  const cdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase;
-  const logoSrc = cdnBase ? `${cdnBase}/logo.webp` : "/logo.webp";
+  const logoSrc = "/logo.webp";
 
   return (
     <footer className="flex flex-col items-center self-stretch w-full bg-neutral-900">
@@ -18,13 +16,6 @@ const Footer: React.FC = () => {
               <img
                 loading="lazy"
                 src={logoSrc}
-                onError={(e) => {
-                  if (cdnBase) {
-                    const target = e.currentTarget;
-                    target.onerror = null;
-                    target.src = "/logo.webp";
-                  }
-                }}
                 alt="UCS GROUP logo"
                 className="object-contain shrink-0 aspect-square w-[80px] md:w-[20vw]"
               />

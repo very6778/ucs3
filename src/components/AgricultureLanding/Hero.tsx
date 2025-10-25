@@ -135,19 +135,12 @@ const Hero: React.FC = () => {
   const toAssetPath = (path: string) => (path.startsWith("/") ? path : `/${path}`);
   const cdnOrLocal = (path: string) => {
     const normalizedPath = toAssetPath(path);
-    return cdnBaseUrl ? `${cdnBaseUrl}${normalizedPath}` : normalizedPath;
+    return normalizedPath;
   };
 
   // State and handler for the logo images fallback
   const localLogoUrl = '/logo.webp';
-  const cdnLogoUrl = cdnOrLocal('/logo.webp');
-  const [logoImageSrc, setLogoImageSrc] = useState(cdnLogoUrl);
-
-  const handleLogoImageError = () => {
-    if (cdnBaseUrl && logoImageSrc === cdnLogoUrl) {
-      setLogoImageSrc(localLogoUrl);
-    }
-  };
+  const [logoImageSrc, setLogoImageSrc] = useState(localLogoUrl);
 
   // State and handler for the wheat image fallback
   const cdnWheatUrl = cdnOrLocal('/wheat.webp');
@@ -423,7 +416,6 @@ const Hero: React.FC = () => {
                     height={80}
                     className="w-[250px] h-auto"
                     src={logoImageSrc}
-                    onError={handleLogoImageError}
                     alt="UCS GROUP logo"
                     priority
                     loading="eager"
@@ -435,7 +427,6 @@ const Hero: React.FC = () => {
                     height={60}
                     className="w-[200px] lg:w-[250px] h-auto"
                     src={logoImageSrc}
-                    onError={handleLogoImageError}
                     alt="UCS GROUP logo"
                     priority
                     loading="eager"
