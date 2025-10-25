@@ -140,18 +140,7 @@ const Hero: React.FC = () => {
 
   // State and handler for the logo images fallback
   const localLogoUrl = '/logo.webp';
-  const [logoImageSrc, setLogoImageSrc] = useState(localLogoUrl);
-
-  // State and handler for the wheat image fallback
-  const cdnWheatUrl = cdnOrLocal('/wheat.webp');
-  const localWheatUrl = '/wheat.webp';
-  const [wheatImageSrc, setWheatImageSrc] = useState(cdnWheatUrl);
-
-  const handleWheatImageError = () => {
-    if (cdnBaseUrl && wheatImageSrc === cdnWheatUrl) {
-      setWheatImageSrc(localWheatUrl);
-    }
-  };
+  const logoImageSrc = localLogoUrl;
 
   // States and handlers for the hero slider images fallback
   const [heroSliderImageSources, setHeroSliderImageSources] = useState(
@@ -174,18 +163,6 @@ const Hero: React.FC = () => {
       imageControls.start("visible")
     }
   }, [isHeadingInView, controls, imageControls])
-
-  useEffect(() => {
-    // Preload the wheat image
-    const img = new (window.Image as any)() as HTMLImageElement
-    img.src = cdnWheatUrl; // Attempt to load from CDN first
-    img.onerror = () => { // If CDN fails, try local
-      img.src = localWheatUrl;
-    };
-    img.onload = () => {
-      // Image loaded successfully (either CDN or local)
-    }
-  }, [cdnWheatUrl, localWheatUrl]) // Depend on URLs to re-run if they change
 
   useEffect(() => {
     const animateCards = () => {
@@ -615,50 +592,16 @@ const Hero: React.FC = () => {
             {isMobile ? (
               <>
                 <div className="text-container flex flex-col items-center" style={{ position: "relative", minHeight: "95px" }}>
-                  <div className="flex items-center justify-center">
-                    <StableCharByCharText
-                      text="NEXT RISE"
-                      className="font-light font-merryweather text-[4rem] sm:text-[4.6rem] md:text-[5.4rem] lg:text-[6.1rem]"
-                      initialDelay={0.1}
-                      staggerDelay={0}
-                    />
-                  </div>
-                  <div className="flex items-center justify-center mt-1">
-                    <StableCharByCharText
-                      text="AGRO"
-                      className="font-merryweather font-light text-[0.9em]"
-                      initialDelay={0.1 + 0.8}
-                      staggerDelay={0}
-                    />
-                    <motion.div
-                      className="flex items-center h-auto ml-2"
-                      initial={{ opacity: 0, filter: "blur(12px)", y: 0 }}
-                      animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.1 + 0.8 + 0.4 }}
-                    >
-                      {/* Wheat Image */}
-                      <motion.img
-                        src={wheatImageSrc}
-                        onError={(e) => { e.currentTarget.onerror = null; setWheatImageSrc(localWheatUrl) }}
-                        className="h-[0.8em] w-auto object-contain"
-                        width={24}
-                        height={24}
-                        style={{
-                          filter: "drop-shadow(0 25px 25px rgba(0,0,0,0.35))",
-                          WebkitFilter: "drop-shadow(0 25px 25px rgba(0,0,0,0.35))",
-                        }}
-                        transition={{
-                          repeat: Number.POSITIVE_INFINITY,
-                          duration: 5,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </motion.div>
-                  </div>
                   <StableCharByCharText
-                    text="CONSTRUCTION"
-                    className="self-center mt-1 sm:mt-2 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none text-black font-poppins"
-                    initialDelay={0.1 + 0.8 + 0.8 + 0.3}
+                    text="Reliable and Affordable supply"
+                    className="font-light font-merryweather text-center text-[2.4rem] sm:text-[2.9rem]"
+                    initialDelay={0.1}
+                    staggerDelay={0}
+                  />
+                  <StableCharByCharText
+                    text="from agriculture to construction"
+                    className="mt-1 sm:mt-2 text-[1.8rem] sm:text-[2.3rem] md:text-[2.8rem] font-bold tracking-tight leading-none text-black font-poppins text-center"
+                    initialDelay={0.1 + 0.8}
                     staggerDelay={0}
                   />
                 </div>
@@ -667,50 +610,16 @@ const Hero: React.FC = () => {
               /* Desktop view: Updated layout */
               <>
                 <div className="text-container flex flex-col" style={{ position: "relative", minHeight: "160px" }}>
-                  <div className="flex items-center">
-                    <StableCharByCharText
-                      text="NEXT RISE"
-                      className="font-light font-merryweather text-[4rem] sm:text-[4.6rem] md:text-[5.4rem] lg:text-[6.1rem]"
-                      initialDelay={0.1}
-                      staggerDelay={0}
-                    />
-                  </div>
-                  <div className="flex items-start">
-                    <StableCharByCharText
-                      text="AGRO"
-                      className="self-start font-poppins font-light mr-2 text-[0.9em]"
-                      initialDelay={0.1 + 0.8}
-                      staggerDelay={0}
-                    />
-                    <motion.div
-                      className="flex items-center h-auto"
-                      initial={{ opacity: 0, filter: "blur(12px)", y: 0 }}
-                      animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.1 + 0.8 + 0.4 }}
-                    >
-                       {/* Wheat Image */}
-                       <motion.img
-                        src={wheatImageSrc}
-                        onError={(e) => { e.currentTarget.onerror = null; setWheatImageSrc(localWheatUrl) }}
-                        className="h-[0.8em] w-auto object-contain"
-                        width={24}
-                        height={24}
-                        style={{
-                          filter: "drop-shadow(0 25px 25px rgba(0,0,0,0.35))",
-                          WebkitFilter: "drop-shadow(0 25px 25px rgba(0,0,0,0.35))",
-                        }}
-                        transition={{
-                          repeat: Number.POSITIVE_INFINITY,
-                          duration: 5,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </motion.div>
-                  </div>
                   <StableCharByCharText
-                    text="CONSTRUCTION"
-                    className="self-start mt-1 sm:mt-2 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none text-black font-poppins"
-                    initialDelay={0.1 + 0.8 + 0.8 + 0.3}
+                    text="Reliable and Affordable supply"
+                    className="font-light font-merryweather text-[2.8rem] sm:text-[3.4rem] md:text-[4.2rem] lg:text-[4.9rem]"
+                    initialDelay={0.1}
+                    staggerDelay={0}
+                  />
+                  <StableCharByCharText
+                    text="from agriculture to construction"
+                    className="self-start mt-1 sm:mt-2 text-[1.8rem] sm:text-[2.3rem] md:text-[2.8rem] lg:text-[3.3rem] font-bold tracking-tight leading-none text-black font-poppins"
+                    initialDelay={0.1 + 0.8}
                     staggerDelay={0}
                   />
                 </div>

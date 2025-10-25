@@ -250,7 +250,7 @@ const MissionSection: React.FC = () => {
   const preloadLogos = () => {
     // Tüm benzersiz logolar (marquee'de 28 adet var - 14'ün iki kopyası)
     const uniqueLogoFiles = [
-      'aag.png', 'agrova.png', 'aston.jpg', 'besleragro.png', 'ceynak.png',
+      'aag.png', 'aston.jpg', 'besleragro.png', 'ceynak.png',
       'corner.png', 'dmcompany.png', 'generalsurvey.png', 'grainstar.png', 'milano.png',
       'nifa.jpeg', 'tabangıda.png', 'yamansel.png'  // Sgs.png kaldırıldı
     ];
@@ -434,9 +434,6 @@ const MissionSection: React.FC = () => {
               <img src={`${process.env.NEXT_PUBLIC_CDN_URL}/aag.png`} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/aag.png" }} alt="AAG" className="max-w-full max-h-full object-contain" />
             </div>
             <div className="flex items-center justify-center w-32 h-8 mx-10">
-              <img src={`${process.env.NEXT_PUBLIC_CDN_URL}/agrova.png`} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/agrova.png" }} alt="Agrova" className="max-w-full max-h-full object-contain" />
-            </div>
-            <div className="flex items-center justify-center w-32 h-8 mx-10">
               <img src={`${process.env.NEXT_PUBLIC_CDN_URL}/aston.jpg`} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/aston.jpg" }} alt="Aston" className="max-w-full max-h-full object-contain" />
             </div>
             <div className="flex items-center justify-center w-32 h-8 mx-10">
@@ -471,9 +468,6 @@ const MissionSection: React.FC = () => {
             </div>
             <div className="flex items-center justify-center w-32 h-8 mx-10">
               <img src={`${process.env.NEXT_PUBLIC_CDN_URL}/aag.png`} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/aag.png" }} alt="AAG" className="max-w-full max-h-full object-contain" />
-            </div>
-            <div className="flex items-center justify-center w-32 h-8 mx-10">
-              <img src={`${process.env.NEXT_PUBLIC_CDN_URL}/agrova.png`} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/agrova.png" }} alt="Agrova" className="max-w-full max-h-full object-contain" />
             </div>
             <div className="flex items-center justify-center w-32 h-8 mx-10">
               <img src={`${process.env.NEXT_PUBLIC_CDN_URL}/aston.jpg`} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/aston.jpg" }} alt="Aston" className="max-w-full max-h-full object-contain" />
