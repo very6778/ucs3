@@ -21,6 +21,20 @@ export default {
     'aspect-[19/20]',
     'rounded-2xl',
     'demo-material-image',
+    'scale-[0.89]',
+    'text-[2.4rem]',
+    'sm:text-[2.9rem]',
+    'text-[1.8rem]',
+    'sm:text-[2.3rem]',
+    'md:text-[2.8rem]',
+    'text-[2.8rem]',
+    'sm:text-[3.4rem]',
+    'md:text-[4.2rem]',
+    'lg:text-[4.9rem]',
+    'text-[0.8625rem]',
+    'sm:text-[0.9875rem]',
+    'md:text-[1.1125rem]',
+    'lg:text-[1.3625rem]'
   ],
   theme: {
   	extend: {
