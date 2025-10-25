@@ -4,7 +4,9 @@ import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 const Footer: React.FC = () => {
-  const NEXT_PUBLIC_CDN_URL = process.env.NEXT_PUBLIC_CDN_URL;
+  const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || "";
+  const cdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase;
+  const logoSrc = cdnBase ? `${cdnBase}/logo.webp` : "/logo.webp";
 
   return (
     <footer className="flex flex-col items-center self-stretch w-full bg-neutral-900">
@@ -15,7 +17,14 @@ const Footer: React.FC = () => {
             <div className="flex flex-col items-center md:flex-row md:items-center gap-4">
               <img
                 loading="lazy"
-                src={`${NEXT_PUBLIC_CDN_URL}/logo.svg` || "/logo.svg"}
+                src={logoSrc}
+                onError={(e) => {
+                  if (cdnBase) {
+                    const target = e.currentTarget;
+                    target.onerror = null;
+                    target.src = "/logo.webp";
+                  }
+                }}
                 alt="UCS GROUP logo"
                 className="object-contain shrink-0 aspect-square w-[80px] md:w-[20vw]"
               />
@@ -23,13 +32,14 @@ const Footer: React.FC = () => {
 
             <div className="flex flex-col items-center md:items-start text-stone-300 text-sm md:ml-10">
               <div className="leading-6 text-center md:text-left max-w-[60vw] md:max-w-[15vw]">
-                Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba, Dubai, U.A.E.
+                Atatürk Mah. Ertuğrul Gazi Sk. Metropol İstanbul Sitesi A Blok<br />
+                No: 2E İç Kapı No: 331 Ataşehir / İstanbul
               </div>
               <div className="mt-4 leading-6 text-center md:text-left">
-                Phone: +966 54 402 3149
+                Phone: +212 559 9290
               </div>
               <div className="mt-4 leading-6 text-center md:text-left">
-                Email: info@ucsgroupllc.com
+                Email: info@ucscogroup.com
               </div>
 
               {/* Social media icons */}

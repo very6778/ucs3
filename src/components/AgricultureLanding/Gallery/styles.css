@@ -85,3 +85,38 @@
       rgba(0, 0, 0, 0),
       rgba(0, 0, 0, 0.2) 50%);
 }
+
+.auto-gallery-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+.auto-gallery-swiper {
+  position: relative;
+  overflow: hidden;
+}
+
+.auto-gallery-swiper::before,
+.auto-gallery-swiper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(40px, 8vw, 100px);
+  pointer-events: none;
+  z-index: 10;
+  mix-blend-mode: screen;
+}
+
+.auto-gallery-swiper::before {
+  left: -4px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.85) 25%,
+    rgba(255, 255, 255, 0.45) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: blur(10px);
+  mask-image: linear-gradient(to right, black 0%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, transparent 80%);
+}

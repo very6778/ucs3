@@ -34,10 +34,10 @@ const projects = [
       "With our extensive experience in international agricultural trade, we add value to the industry through a diverse product portfolio that includes high-protein wheat, barley, corn, and soybeans. Our consistent supply capability, strong network of trusted producers, and product-focused service approach enable us to deliver sustainable and competitive solutions to our clients.",
   },
   {
-    title: "Logistic Advantages",
+    title: "Supply Advantages",
     image: "/12.webp",
     description:
-      "Right Product, Right Time, Right Destination\n\nThrough strong connections at Novorossiysk, Mersin, and Iskenderun ports, we ensure fast and flexible maritime transport. Additionally, with our proven capability in land logistics, we offer factory-delivered solutions (DAP/DDP) directly to your doorstep.\nAt every stage of the supply chain, we provide our partners with superior logistical advantages through traceability, efficient planning, and a customer-focused approach—saving both time and cost.",
+      "We provide affordable supply chain management by combining strategic freight planning with lean inventory control to reduce transportation costs, while ensuring every shipment arrives on time with complete quality compliance and full end-to-end logistics visibility.",
   },
 ];
 

@@ -9,7 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Loader2, EyeIcon, EyeOffIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const NEXT_PUBLIC_CDN_URL = process.env.NEXT_PUBLIC_CDN_URL;
+const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || "";
+const cdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase;
+const initialLogoSrc = cdnBase ? `${cdnBase}/logo.webp` : "/logo.webp";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,7 +21,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [logoSrc, setLogoSrc] = useState(NEXT_PUBLIC_CDN_URL ? `${NEXT_PUBLIC_CDN_URL}/logo.svg` : "/logo.svg");
+  const [logoSrc, setLogoSrc] = useState(initialLogoSrc);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,7 +65,9 @@ export default function LoginPage() {
   };
 
   const handleImageError = () => {
-    setLogoSrc("/logo.svg");
+    if (logoSrc !== "/logo.webp") {
+      setLogoSrc("/logo.webp");
+    }
   };
 
   return (

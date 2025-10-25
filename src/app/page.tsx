@@ -9,13 +9,16 @@ const CardsComponent = dynamic(() => import('../components/AgricultureLanding/Ca
 const ContactForm = dynamic(() => import('../components/AgricultureLanding/ContactForm'));
 import OurMission from "@/components/AgricultureLanding/OurMissionHome";
 const Footer = dynamic(() => import('@/components/AgricultureLanding/Footer'));
+import { getLocalGalleryData } from "@/lib/getLocalGalleryData";
 
 export const metadata: Metadata = {
   title: "Home | UCS Agriculture",
   description: "Welcome to UCS Agriculture - Sustainable farming solutions",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const galleryData = await getLocalGalleryData();
+
   return (
     <div className="flex flex-col items-center pt-8 w-full mx-auto">
       <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -24,7 +27,7 @@ export default function HomePage() {
         <DiscoverSection />
       </div>
       <div className="w-full overflow-hidden">
-        <Gallery />
+        <Gallery initialGalleries={galleryData} />
       </div>
       <OperationMap />
       <OurAdvantages />

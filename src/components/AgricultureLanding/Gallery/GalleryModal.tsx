@@ -5,17 +5,14 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, ChevronLeft, ChevronRight } from "lucide-react"
-import type { GalleryImage } from "@/components/Admin/types"
+import type { LocalGallery } from "@/types/gallery"
 import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog"
 import { DialogTitle } from "@radix-ui/react-dialog"
 
 interface GalleryModalProps {
   isOpen: boolean
   onClose: () => void
-  gallery: {
-    title: string
-    images: GalleryImage[]
-  } | null
+  gallery: LocalGallery | null
   currentImageIndex: number
   onPrevImage: () => void
   onNextImage: () => void
@@ -68,7 +65,8 @@ const GalleryModal: React.FC<GalleryModalProps> = ({
 
   if (!gallery) return null
 
-  const currentImage = gallery.images[currentImageIndex]
+  const currentImage =
+    gallery.images[currentImageIndex] ?? gallery.images[0]
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>

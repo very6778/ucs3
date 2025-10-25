@@ -16,13 +16,16 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ src, className, alt = "
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const [isLoading, setIsLoading] = useState(true);
-  const cdnBase = process.env.NEXT_PUBLIC_CDN_URL;
-  const resolvedSrc = cdnBase ? `${cdnBase}${src}` : src;
-  const [currentSrc, setCurrentSrc] = useState(resolvedSrc || src || "");
+  const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || "";
+  const normalizedCdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase;
+  const normalizePath = (path: string) => (path.startsWith("/") ? path : `/${path}`);
+  const resolvedSrc = normalizedCdnBase ? `${normalizedCdnBase}${normalizePath(src)}` : normalizePath(src);
+  const fallbackSrc = normalizePath(src);
+  const [currentSrc, setCurrentSrc] = useState(resolvedSrc || fallbackSrc);
 
   useEffect(() => {
-    setCurrentSrc(resolvedSrc || src || "");
-  }, [resolvedSrc, src]);
+    setCurrentSrc(resolvedSrc || fallbackSrc);
+  }, [resolvedSrc, fallbackSrc]);
 
   const handleImageLoaded = () => {
     setIsLoading(false);
@@ -61,11 +64,10 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ src, className, alt = "
         transition={{ duration: 0.3, ease: "easeOut" }}
         whileHover={{ scale: 1.01, transition: { duration: 0.3 } }}
         onLoad={handleImageLoaded}
-        onError={(e) => {
-            if (!src) return;
-            if (currentSrc !== src) {
-              setCurrentSrc(src);
-            }
+        onError={() => {
+          if (currentSrc !== fallbackSrc) {
+            setCurrentSrc(fallbackSrc);
+          }
         }}
       />
     </div>
@@ -76,6 +78,7 @@ const OurProducts: React.FC = () => {
   const sectionRef = useRef(null)
   const carouselRef = useRef<HTMLDivElement>(null)
   const videoAspectRatio = 1.43
+  const normalizePath = (path: string) => (path.startsWith("/") ? path : `/${path}`)
   const productData = [
     {
       id: 1,
@@ -186,7 +189,7 @@ const OurProducts: React.FC = () => {
                       <div className="w-[300px] relative" style={{ height: `${imageHeight}px` }}>
                         <img
                           className="w-full h-full object-cover rounded-xl"
-                          src={process.env.NEXT_PUBLIC_CDN_URL ? `${process.env.NEXT_PUBLIC_CDN_URL}/2.jpg` : "/2.jpg"}
+                          src={normalizePath("/2.jpg")}
                           alt="Products display"
                           onError={(e) => {
                               const target = e.target as HTMLImageElement;

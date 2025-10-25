@@ -157,7 +157,7 @@ export default function RootLayout({
         />
 
         {/* Kritik olmayan görselleri daha düşük öncelikle preload edelim */}
-        <link rel="preload" as="image" href="/logo.svg" fetchPriority="auto" />
+          <link rel="preload" as="image" href="/logo.webp" fetchPriority="auto" />
         <link rel="preload" as="image" href="/icon.svg" fetchPriority="auto" />
 
         {/* CSS font tanımlarını inline olarak ekleyerek FOUT (Flash of Unstyled Text) önleyelim */}

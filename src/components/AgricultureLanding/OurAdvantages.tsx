@@ -4,10 +4,29 @@ import { Plane, Globe, Lightbulb, Trees, ShieldCheck, ClipboardCheck, X } from "
 import { useState, useEffect, useRef } from "react"
 import { BentoGrid } from "@/components/magicui/bento-grid"
 import React from "react"
-import { motion, useInView } from "framer-motion"; 
-import { useAnimation } from "framer-motion"; 
-import Image from "next/image"; // Import next/image
-import AdvantageBentoCard from './AdvantageBentoCard'; // Yeni bileşeni import et
+import { motion, useInView } from "framer-motion"
+import { useAnimation } from "framer-motion"
+import Image from "next/image"
+import AdvantageBentoCard from "./AdvantageBentoCard"
+
+const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || ""
+const cdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase
+const normalizeAssetPath = (path: string) => (path.startsWith("/") ? path : `/${path}`)
+const assetSrc = (path: string) => (cdnBase ? `${cdnBase}${normalizeAssetPath(path)}` : normalizeAssetPath(path))
+const renderBackgroundImage = (path: string, alt: string) => (
+  <Image
+    src={assetSrc(path)}
+    onError={(e) => {
+      if (cdnBase) {
+        e.currentTarget.src = normalizeAssetPath(path)
+      }
+    }}
+    alt={alt}
+    fill
+    className="object-cover opacity-80"
+    unoptimized
+  />
+)
 
 interface Feature {
   Icon: React.FC<any>;
@@ -25,16 +44,7 @@ const features: Feature[] = [
     description:
       "We provide more than just products — we deliver insights.\nBy regularly analyzing international market trends and price movements, we offer data-driven support to guide your purchasing decisions.",
     cta: "Learn more",
-    background: (
-      <Image
-        src={`${process.env.NEXT_PUBLIC_CDN_URL}/7.webp`}
-        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/7.webp"; }}
-        alt="Market Intelligence"
-        fill
-        className="object-cover opacity-80"
-        unoptimized
-      />
-    ),
+    background: renderBackgroundImage("/7.webp", "Market Intelligence"),
     className: "lg:row-start-1 lg:row-end-2 lg:col-start-1 lg:col-end-3",
   },
   {
@@ -43,16 +53,7 @@ const features: Feature[] = [
     description:
       "The right port, the right solution.\nWith our active presence in strategic ports such as Novorossiysk, Mersin, and Iskenderun, we ensure your operations run smoothly and on time.",
     cta: "Learn more",
-    background: (
-      <Image
-        src={`${process.env.NEXT_PUBLIC_CDN_URL}/8.webp`}
-        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/8.webp"; }} // Use e.currentTarget for next/image
-        alt="Key Ports"
-        fill // Use fill instead of w-full h-full for next/image
-        className="object-cover opacity-80"
-        unoptimized // Add unoptimized for local fallback
-      />
-    ),
+    background: renderBackgroundImage("/8.webp", "Key Ports"),
     className: "lg:row-start-1 lg:row-end-2 lg:col-start-3 lg:col-end-4",
   },
   {
@@ -61,16 +62,7 @@ const features: Feature[] = [
     description:
       "Seamless delivery from port to plant.\nBy managing sea and land transportation through an integrated approach, we ensure your products reach their final destination safely and on time.",
     cta: "Learn more",
-    background: (
-      <Image
-        src={`${process.env.NEXT_PUBLIC_CDN_URL}/9.jpg`}
-        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/9.jpg"; }} // Use e.currentTarget for next/image
-        alt="End-to-End Delivery"
-        fill // Use fill instead of w-full h-full for next/image
-        className="object-cover opacity-80"
-        unoptimized // Add unoptimized for local fallback
-      />
-    ),
+    background: renderBackgroundImage("/9.jpg", "End-to-End Delivery"),
     className: "lg:row-start-2 lg:row-end-3 lg:col-start-1 lg:col-end-2",
   },
   {
@@ -79,16 +71,7 @@ const features: Feature[] = [
     description:
       "We know the grain market inside out.\nFocusing on high-protein wheat, corn, barley, and soybeans, we deliver quality-driven and need-specific solutions. Our expertise is what sets us apart in the field.",
     cta: "Learn more",
-    background: (
-      <Image
-        src={`${process.env.NEXT_PUBLIC_CDN_URL}/10.jpg`}
-        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/10.jpg"; }} // Use e.currentTarget for next/image
-        alt="Product Knowledge"
-        fill // Use fill instead of w-full h-full for next/image
-        className="object-cover opacity-80"
-        unoptimized // Add unoptimized for local fallback
-      />
-    ),
+    background: renderBackgroundImage("/10.jpg", "Product Knowledge"),
     className: "lg:row-start-2 lg:row-end-3 lg:col-start-2 lg:col-end-4",
   },
   {
@@ -97,16 +80,7 @@ const features: Feature[] = [
     description:
       "Strong partnerships, reliable supply.\nThrough selective collaborations with direct producers and exporters, we ensure high quality and full traceability in every shipment.",
     cta: "Learn more",
-    background: (
-      <Image
-        src={`${process.env.NEXT_PUBLIC_CDN_URL}/14.webp`}
-        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/14.webp"; }} // Use e.currentTarget for next/image
-        alt="Supplier Network"
-        fill // Use fill instead of w-full h-full for next/image
-        className="object-cover opacity-80"
-        unoptimized // Add unoptimized for local fallback
-      />
-    ),
+    background: renderBackgroundImage("/14.webp", "Supplier Network"),
     className: "lg:row-start-3 lg:row-end-4 lg:col-start-1 lg:col-end-3",
   },
   {
@@ -115,16 +89,7 @@ const features: Feature[] = [
     description:
       "Quality control in every batch, confidence in every delivery.\nWe meticulously verify product compliance with technical standards through pre-loading laboratory analyses, including moisture and protein testing. Each shipment is backed by our commitment to consistent and sustainable quality.",
     cta: "Learn more",
-    background: (
-      <Image
-        src={`${process.env.NEXT_PUBLIC_CDN_URL}/15.webp`}
-        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src="/15.webp"; }} // Use e.currentTarget for next/image
-        alt="Quality Assurance"
-        fill // Use fill instead of w-full h-full for next/image
-        className="object-cover opacity-80"
-        unoptimized // Add unoptimized for local fallback
-      />
-    ),
+    background: renderBackgroundImage("/15.webp", "Quality Assurance"),
     className: "lg:row-start-3 lg:row-end-4 lg:col-start-3 lg:col-end-4",
   },
 ];

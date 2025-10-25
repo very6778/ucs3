@@ -1,52 +1,43 @@
 "use client";
 
 import type React from "react";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useAnimation, useInView } from "framer-motion";
-import type { GalleryImage } from "@/components/Admin/types";
 import GalleryModal from "./GalleryModal";
+import type { LocalGallery, LocalGalleryImage } from "@/types/gallery";
 
 import type SwiperCore from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import EffectMaterial from "./effect-material.esm";
+import { Autoplay } from "swiper/modules";
 import "./styles.css";
 
 import "swiper/css";
 import "swiper/css/bundle";
 
-interface GalleryData {
-  id: string;
-  title: string;
-  description: string;
-  images: GalleryImage[];
-  cover_image_id?: string;
+interface GalleryProps {
+  initialGalleries: LocalGallery[];
 }
 
-const Gallery: React.FC = () => {
-  const [galleries, setGalleries] = useState<GalleryData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedGallery, setSelectedGallery] = useState<GalleryData | null>(
-    null
+type CoverImageMeta = LocalGalleryImage & {
+  galleryIndex: number;
+  imageIndex: number;
+};
+
+const Gallery: React.FC<GalleryProps> = ({ initialGalleries }) => {
+  const galleries = initialGalleries;
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [selectedGallery, setSelectedGallery] = useState<LocalGallery | null>(
+    () => initialGalleries[0] ?? null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
-  const [currentLocation, setCurrentLocation] = useState("...");
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-
-  const [slide1Animated, setSlide1Animated] = useState(false);
-  const [slide2Animated, setSlide2Animated] = useState(false);
-  const [slide3Animated, setSlide3Animated] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
   const swiperRef = useRef<SwiperCore | null>(null);
-  const slideRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
-  const [hasAnimated, setHasAnimated] = useState(false);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
-  const isSlideInView = useInView(slideRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -61,205 +52,10 @@ const Gallery: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (loading || !sectionRef.current || galleries.length === 0 || hasAnimated) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            controls.start("visible");
-            setHasAnimated(true);
-            observer.unobserve(entry.target);
-          }, 50);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
+    if (isInView) {
+      controls.start("visible");
     }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [loading, controls, hasAnimated, galleries]);
-
-  useEffect(() => {
-    if (isSlideInView) {
-      const timeoutId = setTimeout(() => {
-        setSlide1Animated(true);
-      }, 300);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isSlideInView]);
-
-  useEffect(() => {
-    if (slide1Animated) {
-      const timeoutId = setTimeout(() => {
-        setSlide2Animated(true);
-      }, 300);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [slide1Animated]);
-
-  useEffect(() => {
-    if (slide2Animated) {
-      const timeoutId = setTimeout(() => {
-        setSlide3Animated(true);
-      }, 300);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [slide2Animated]);
-
-  const fetchGalleryData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      // Supabase bağlantısını Partytown ile web worker'da yapalım
-      if (window.partytown) {
-        const fetchData = () => {
-          return new Promise((resolve) => {
-            // Web worker içinde çalıştırılacak kod
-            const script = document.createElement('script');
-            script.type = 'text/partytown';
-            script.innerHTML = `
-              (async function() {
-                try {
-                  const response = await fetch("/api/gallery");
-                  if (!response.ok) {
-                    throw new Error("HTTP error! status: " + response.status);
-                  }
-                  const data = await response.json();
-                  window.dispatchEvent(new CustomEvent('gallery-data-loaded', { 
-                    detail: { data: data } 
-                  }));
-                } catch (e) {
-                  window.dispatchEvent(new CustomEvent('gallery-data-error', { 
-                    detail: { error: e.message } 
-                  }));
-                }
-              })();
-            `;
-            
-            // Custom event tiplerini tanımlayalım
-            type GalleryDataLoadedEvent = CustomEvent<{data: GalleryData[]}>;
-            type GalleryDataErrorEvent = CustomEvent<{error: string}>;
-            
-            // Event listener'ları ekleyelim
-            const successHandler = ((e: Event) => {
-              const customEvent = e as GalleryDataLoadedEvent;
-              resolve(customEvent.detail.data);
-              window.removeEventListener('gallery-data-loaded', successHandler);
-              window.removeEventListener('gallery-data-error', errorHandler);
-              document.body.removeChild(script);
-            }) as EventListener;
-            
-            const errorHandler = ((e: Event) => {
-              const customEvent = e as GalleryDataErrorEvent;
-              console.error("Gallery data fetch error:", customEvent.detail.error);
-              setError(customEvent.detail.error || "Failed to fetch gallery data.");
-              setLoading(false);
-              window.removeEventListener('gallery-data-loaded', successHandler);
-              window.removeEventListener('gallery-data-error', errorHandler);
-              document.body.removeChild(script);
-              resolve(null);
-            }) as EventListener;
-            
-            window.addEventListener('gallery-data-loaded', successHandler);
-            window.addEventListener('gallery-data-error', errorHandler);
-            
-            document.body.appendChild(script);
-          });
-        };
-        
-        const data = await fetchData() as GalleryData[] | null;
-        if (!data) return;
-        
-        const processedData = data
-          .map((gallery) => {
-            const cover = gallery.images.find((img) => img.is_cover_photo);
-            if (cover && !gallery.cover_image_id) {
-              gallery.cover_image_id = cover.id;
-            }
-            if (!gallery.images || gallery.images.length === 0) {
-              console.warn(`Gallery "${gallery.title}" has no images, filtering out.`);
-              return null;
-            }
-            return gallery;
-          })
-          .filter(Boolean) as GalleryData[];
-
-        setGalleries(processedData);
-        setCurrentIndex(0);
-
-        if (processedData.length > 0) {
-          const firstCover = processedData[0].images.find(img =>
-            img.is_cover_photo || (processedData[0].cover_image_id && img.id === processedData[0].cover_image_id)
-          ) || processedData[0].images[0];
-          if (firstCover) {
-            setCurrentLocation(firstCover.location || processedData[0].title || "Unknown Location");
-          } else {
-            setCurrentLocation(processedData[0].title || "Unknown Location");
-          }
-        } else {
-          setCurrentLocation("No Galleries Available");
-        }
-        
-      } else {
-        // Partytown yoksa normal fetch kullanılır
-        const response = await fetch("/api/gallery");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        let data: GalleryData[] = await response.json();
-
-        data = data
-          .map((gallery) => {
-            const cover = gallery.images.find((img) => img.is_cover_photo);
-            if (cover && !gallery.cover_image_id) {
-              gallery.cover_image_id = cover.id;
-            }
-            if (!gallery.images || gallery.images.length === 0) {
-              console.warn(`Gallery "${gallery.title}" has no images, filtering out.`);
-              return null;
-            }
-            return gallery;
-          })
-          .filter(Boolean) as GalleryData[];
-
-        setGalleries(data);
-        setCurrentIndex(0);
-
-        if (data.length > 0) {
-          const firstCover = data[0].images.find(img =>
-            img.is_cover_photo || (data[0].cover_image_id && img.id === data[0].cover_image_id)
-          ) || data[0].images[0];
-          if (firstCover) {
-            setCurrentLocation(firstCover.location || data[0].title || "Unknown Location");
-          } else {
-            setCurrentLocation(data[0].title || "Unknown Location");
-          }
-        } else {
-          setCurrentLocation("No Galleries Available");
-        }
-      }
-    } catch (e: any) {
-      setError(e.message || "Failed to fetch gallery data.");
-      console.error("Fetch error:", e);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchGalleryData();
-  }, [fetchGalleryData]);
+  }, [controls, isInView]);
 
   const handlePrevious = () => {
     swiperRef.current?.slidePrev();
@@ -269,43 +65,32 @@ const Gallery: React.FC = () => {
     swiperRef.current?.slideNext();
   };
 
-  const handleImageClick = (galleryIndex: number) => {
-    if (galleryIndex >= 0 && galleryIndex < galleries.length) {
-      setSelectedGallery(galleries[galleryIndex]);
-      setModalImageIndex(0);
-      setIsModalOpen(true);
-    } else {
+  const handleImageClick = (galleryIndex: number, imageIndex: number) => {
+    const gallery = galleries[galleryIndex];
+    if (!gallery) {
       console.warn("Clicked on an invalid slide index:", galleryIndex);
+      return;
     }
+    setSelectedGallery(gallery);
+    setModalImageIndex(imageIndex);
+    setIsModalOpen(true);
   };
 
-  const coverImages = galleries
-    .map((gallery, index) => {
-      const coverImage =
-        gallery.images.find(
-          (img) =>
-            img.is_cover_photo ||
-            (gallery.cover_image_id && img.id === gallery.cover_image_id)
-        ) || (gallery.images.length > 0 ? gallery.images[0] : null);
-
-      return coverImage ? { ...coverImage, originalGalleryIndex: index } : null;
-    })
-    .filter(Boolean) as (GalleryImage & { originalGalleryIndex: number })[];
-
-  const displayGalleryIndex = currentIndex < galleries.length ? currentIndex : -1;
-  const currentGalleryForDisplay = displayGalleryIndex !== -1 ? galleries[displayGalleryIndex] : null;
-
-  if (loading) {
-    return (
-      <section id="gallery">
-        <GallerySkeleton />
-      </section>
+  const coverImages = useMemo<CoverImageMeta[]>(() => {
+    return galleries.flatMap((gallery, galleryIndex) =>
+      gallery.images.map((image, imageIndex) => ({
+        ...image,
+        galleryIndex,
+        imageIndex,
+      }))
     );
-  }
+  }, [galleries]);
 
-  if (error) {
-    return <div className="text-center text-red-500 py-10">Error: {error}</div>;
-  }
+  const currentCoverMeta = coverImages[currentSlideIndex] ?? null;
+  const shouldAutoplay = coverImages.length > 1;
+  const currentGalleryForDisplay = currentCoverMeta
+    ? galleries[currentCoverMeta.galleryIndex]
+    : null;
 
   if (!galleries || galleries.length === 0) {
     return (
@@ -315,7 +100,8 @@ const Gallery: React.FC = () => {
     );
   }
 
-  const isNextDisabled = currentIndex === coverImages.length - 1 || coverImages.length === 0;
+  const isNextDisabled =
+    coverImages.length === 0 || (!shouldAutoplay && currentSlideIndex === coverImages.length - 1);
 
   return (
     <section
@@ -367,7 +153,7 @@ const Gallery: React.FC = () => {
                   onClick={handlePrevious}
                   className="flex items-center justify-center transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-x-1 p-2"
                   aria-label="Previous Gallery"
-                  disabled={currentIndex === 0}
+                  disabled={!shouldAutoplay && currentSlideIndex === 0}
                 >
                   <svg width="50" height="50" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 sm:w-16 sm:h-16">
                     <path d="M28 20H12" stroke="black" strokeWidth="3" strokeLinecap="round" />
@@ -418,46 +204,57 @@ const Gallery: React.FC = () => {
         </motion.div>
 
         <motion.div
-          ref={slideRef}
-          className="items-end w-full lg:w-[68%] h-[400px] sm:h-[500px] md:h-[600px] lg:h-auto"
+          className="items-end w-full lg:w-[65%] lg:-ml-6 xl:-ml-10 h-[400px] sm:h-[500px] md:h-[600px] lg:h-auto"
           variants={{
-            hidden: { opacity: 0, x: 500 },
+            hidden: { opacity: 0 },
             visible: {
               opacity: 1,
-              x: 0,
-              transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] },
+              transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
             },
           }}
         >
           <Swiper
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
+              if (shouldAutoplay) {
+                swiper.autoplay?.start();
+              }
             }}
             onSlideChange={(swiper) => {
               const newIndex = swiper.realIndex ?? swiper.activeIndex;
-              setCurrentIndex(newIndex);
+              setCurrentSlideIndex(newIndex % (coverImages.length || 1));
 
-              if (newIndex >= 0 && newIndex < coverImages.length) {
-                const currentCover = coverImages[newIndex];
-                const currentGallery = galleries[currentCover.originalGalleryIndex];
-                setCurrentLocation(currentCover.location || currentGallery?.title || "Unknown Location");
-              } else {
+              if (newIndex >= 0 && coverImages.length > 0) {
+                const currentCover = coverImages[newIndex % coverImages.length];
+                const currentGallery = galleries[currentCover.galleryIndex];
+                if (currentGallery) {
+                  setSelectedGallery(currentGallery);
+                  setModalImageIndex(currentCover.imageIndex);
+                }
               }
             }}
-            modules={[EffectMaterial]}
-            effect="material"
-            grabCursor={true}
-            speed={850}
+            modules={[Autoplay]}
+            grabCursor={!shouldAutoplay}
+            speed={shouldAutoplay ? 4500 : 850}
             spaceBetween={16}
             slidesPerView={1.5}
-            loop={false}
-            centeredSlides={true}
+            loop={shouldAutoplay}
+            allowTouchMove={!shouldAutoplay}
+            autoplay={shouldAutoplay
+              ? {
+                  delay: 0,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: false,
+                }
+              : undefined}
+            centeredSlides={shouldAutoplay ? false : true}
+            loopAdditionalSlides={shouldAutoplay ? coverImages.length : 0}
             initialSlide={0}
             breakpoints={{
               640: {
                 slidesPerView: 1.5,
                 spaceBetween: 16,
-                centeredSlides: true,
+                centeredSlides: shouldAutoplay ? false : true,
               },
               1024: {
                 slidesPerView: 3,
@@ -465,20 +262,20 @@ const Gallery: React.FC = () => {
                 centeredSlides: false,
               },
             }}
-            className="h-full w-full material-swiper"
+            className="h-full w-full material-swiper auto-gallery-swiper"
           >
             {coverImages.map((image, index) => (
-              <SwiperSlide key={image.id || `gallery-cover-${index}`}>
+              <SwiperSlide key={`${image.galleryIndex}-${image.imageIndex}`}>
                 <div className="swiper-material-wrapper">
                   <div className="swiper-material-content">
                     <div
                       className="relative w-full h-full aspect-[19/20] rounded-2xl overflow-hidden group cursor-pointer"
-                      onClick={() => handleImageClick(image.originalGalleryIndex)}
+                      onClick={() => handleImageClick(image.galleryIndex, image.imageIndex)}
                       style={{ position: 'relative' }} /* Ensure position is explicitly set for Image with fill prop */
                     >
                       <Image
                         src={image.url || "/placeholder.svg"}
-                        alt={image.title || galleries[image.originalGalleryIndex]?.title || "Gallery cover image"}
+                        alt={image.title || "Gallery cover image"}
                         fill
                         style={{ objectFit: "cover" }}
                         sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 30vw"
@@ -486,19 +283,14 @@ const Gallery: React.FC = () => {
                         className="demo-material-image group-hover:scale-105 transition-transform duration-300 ease-in-out"
                         quality={90}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-                      <span
-                        className="absolute top-4 left-4 backdrop-blur-sm bg-white/30 text-white py-2 px-4 rounded-full text-sm sm:text-base swiper-material-animate-opacity font-jakarta font-normal z-10"
-                      >
-                        {image.location || galleries[image.originalGalleryIndex]?.title || ""}
-                      </span>
+                      
                     </div>
                   </div>
                 </div>
               </SwiperSlide>
             ))}
 
-            {isLargeScreen && (
+            {isLargeScreen && coverImages.length > 0 && (
               <SwiperSlide key="blank-slide-end" className="pointer-events-none">
                 <div className="swiper-material-wrapper">
                   <div className="swiper-material-content">
@@ -534,87 +326,5 @@ const Gallery: React.FC = () => {
     </section>
   );
 };
-
-const GallerySkeleton: React.FC = () => {
-  return (
-    <section
-      id="gallery-skeleton"
-      className="w-full ml-0 md:ml-8 lg:ml-16 mr-0 mt-12 md:mt-20 lg:mt-36 pl-4 sm:pl-6 lg:pl-8 overflow-hidden relative"
-      aria-hidden="true"
-    >
-      <div className="flex flex-col lg:flex-row lg:gap-10">
-        <div className="w-full lg:w-[37%] mb-8 lg:mb-0 flex-shrink-0">
-          <div className="flex flex-col w-full h-full justify-start gap-8 lg:gap-16">
-            <div className="space-y-4">
-              <div className="h-8 sm:h-10 lg:h-12 bg-neutral-200 rounded-lg w-3/4 lg:w-1/2 mx-auto lg:mx-0 animate-pulse"></div>
-              <div className="h-5 sm:h-7 lg:h-9 bg-neutral-200 rounded-lg w-full lg:w-5/6 mx-auto lg:mx-0 animate-pulse"></div>
-            </div>
-            <div className="flex items-center justify-center lg:justify-start gap-8">
-              <div className="h-14 w-14 sm:h-16 sm:w-16 bg-neutral-200 rounded-full animate-pulse transition-opacity duration-300"></div>
-              <div className="h-8 w-24 bg-neutral-200 rounded-lg animate-pulse transition-opacity duration-300"></div>
-              <div className="h-14 w-14 sm:h-16 sm:w-16 bg-neutral-200 rounded-full animate-pulse transition-opacity duration-300"></div>
-            </div>
-            <div className="space-y-3">
-              <div className="h-7 sm:h-9 lg:h-11 bg-neutral-200 rounded-lg w-1/2 lg:w-1/3 mx-auto lg:mx-0 animate-pulse"></div>
-              <div className="h-5 sm:h-7 lg:h-9 bg-neutral-200 rounded-lg w-3/4 lg:w-2/3 mx-auto lg:mx-0 animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full lg:w-[68%] h-[400px] sm:h-[500px] md:h-[600px] lg:h-[550px] flex gap-4">
-          <div className="flex-1 h-full relative overflow-hidden rounded-2xl">
-            <div className="absolute inset-0 bg-neutral-200 animate-pulse"></div>
-            <div className="absolute bottom-4 left-4 h-8 w-24 bg-neutral-300 rounded-full animate-pulse"></div>
-          </div>
-          <div className="flex-1 h-full relative overflow-hidden rounded-2xl hidden sm:block animate-pulse-delay-100">
-            <div className="absolute inset-0 bg-neutral-200"></div>
-            <div className="absolute bottom-4 left-4 h-8 w-24 bg-neutral-300 rounded-full"></div>
-          </div>
-          <div className="flex-1 h-full relative overflow-hidden rounded-2xl hidden lg:block animate-pulse-delay-200">
-            <div className="absolute inset-0 bg-neutral-200"></div>
-            <div className="absolute bottom-4 left-4 h-8 w-24 bg-neutral-300 rounded-full"></div>
-          </div>
-        </div>
-      </div>
-      <div 
-        className="h-2 bg-green-600/30 rounded-full absolute bottom-0 left-0 right-0 mx-auto w-full max-w-[250px]"
-        style={{
-          animation: 'loading 1.5s ease-in-out infinite',
-        }}
-      ></div>
-      <style jsx>{`
-        @keyframes loading {
-          0% {
-            width: 0;
-            opacity: 0.5;
-          }
-          50% {
-            width: 100%;
-            opacity: 1;
-          }
-          100% {
-            width: 0;
-            opacity: 0.5;
-          }
-        }
-        .animate-pulse-delay-100 {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-          animation-delay: 100ms;
-        }
-        .animate-pulse-delay-200 {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-          animation-delay: 200ms;
-        }
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: .7;
-          }
-        }
-      `}</style>
-    </section>
-  )
-}
 
 export default Gallery;

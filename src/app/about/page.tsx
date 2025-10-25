@@ -44,6 +44,10 @@ const About: React.FC = () => {
   const navbarRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const navItemRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || ""
+  const cdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase
+  const iconSrc = cdnBase ? `${cdnBase}/icon.svg` : "/icon.svg"
+  const logoSrc = cdnBase ? `${cdnBase}/logo.webp` : "/logo.webp"
 
   useEffect(() => {
     const lenis = new Lenis()
@@ -147,18 +151,24 @@ const About: React.FC = () => {
             {isMobile ? (
               <img
                 className="w-[15vw] h-[8vh]"
-                src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon.svg`}
+                src={iconSrc}
                 onError={(e) => {
-                  e.currentTarget.src = "/icon.svg";
+                  if (cdnBase) {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/icon.svg";
+                  }
                 }}
                 alt="UCS GROUP logo"
               />
             ) : (
               <img
                 className="w-[15vw] h-[8vh]"
-                src={`${process.env.NEXT_PUBLIC_CDN_URL}/logo.svg`}
+                src={logoSrc}
                 onError={(e) => {
-                  e.currentTarget.src = "/logo.svg";
+                  if (cdnBase) {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/logo.webp";
+                  }
                 }}
                 alt="UCS GROUP logo"
               />

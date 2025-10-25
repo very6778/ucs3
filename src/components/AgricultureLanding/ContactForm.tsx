@@ -211,7 +211,7 @@ const ContactPage: React.FC = () => {
                 <div
                 >
                   <iframe
-                    src="https://maps.google.com/maps?width=100%25&height=600&hl=en&q=Mall of emirates+(UCS)&t=&z=17&ie=UTF8&iwloc=B&output=embed"
+                    src="https://maps.google.com/maps?width=100%25&height=600&hl=en&q=Atat%C3%BCrk%20Mah.%20Ertu%C4%9Frul%20Gazi%20Sk.%20Metropol%20%C4%B0stanbul%20Sitesi%20A%20Blok%20No%3A%202E%20%C4%B0%C3%A7%20Kap%C4%B1%20No%3A%20331%20Ata%C5%9Fehir%20%2F%20%C4%B0stanbul+(UCS)&t=&z=17&ie=UTF8&iwloc=B&output=embed"
                     className="w-full h-[300px] md:h-[430px] rounded-[20px] sm:rounded-[30px]"
                     style={{ border: 0 }}
                     loading="lazy"

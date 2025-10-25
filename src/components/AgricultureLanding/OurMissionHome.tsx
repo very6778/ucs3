@@ -537,8 +537,7 @@ const MissionSection: React.FC = () => {
               <blockquote className="relative z-10">
                 <h2 className="uppercase text-2xl font-bold text-gray-800 mb-7 tracking-wider">Our Mission</h2>
                 <p className="text-2xl md:text-3xl lg:text-5xl font-manrope font-bold text-gray-800 mb-9 leading-relaxed">
-                  "The greatest legacy we can leave is not just in what we harvest today, but in how we nurture the soil
-                  for tomorrow's abundance."
+                  "Our goal is to build a sustainable trade system where labor is valued, trust is the standard, and integrity defines every exchange."
                 </p>
                 <footer className="flex flex-row items-center justify-center gap-4">
                   <div className="w-14 h-14 rounded-full overflow-hidden">
@@ -554,7 +553,7 @@ const MissionSection: React.FC = () => {
                   </div>
                   <div>
                     <p className="font-medium text-black text-lg">Özcan Uca</p>
-                    <p className="text-base text-gray-500">Founder & CEO</p>
+                    <p className="text-base text-gray-500">CEO</p>
                   </div>
                 </footer>
               </blockquote>

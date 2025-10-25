@@ -130,52 +130,46 @@ const Hero: React.FC = () => {
   const sliderInterval = useRef<NodeJS.Timeout | null>(null)
   const savedNextImageCallbackRef = useRef<(() => void) | null>(null);
 
+  const rawCdnBaseUrl = process.env.NEXT_PUBLIC_CDN_URL || "";
+  const cdnBaseUrl = rawCdnBaseUrl.endsWith("/") ? rawCdnBaseUrl.slice(0, -1) : rawCdnBaseUrl;
+  const toAssetPath = (path: string) => (path.startsWith("/") ? path : `/${path}`);
+  const cdnOrLocal = (path: string) => {
+    const normalizedPath = toAssetPath(path);
+    return cdnBaseUrl ? `${cdnBaseUrl}${normalizedPath}` : normalizedPath;
+  };
+
   // State and handler for the logo images fallback
-  const cdnLogoUrl = `${process.env.NEXT_PUBLIC_CDN_URL}/logo.webp`;
   const localLogoUrl = '/logo.webp';
+  const cdnLogoUrl = cdnOrLocal('/logo.webp');
   const [logoImageSrc, setLogoImageSrc] = useState(cdnLogoUrl);
 
   const handleLogoImageError = () => {
-    if (logoImageSrc === cdnLogoUrl) {
+    if (cdnBaseUrl && logoImageSrc === cdnLogoUrl) {
       setLogoImageSrc(localLogoUrl);
     }
   };
 
-  // State and handler for the mobile icon logo fallback
-  const cdnIconUrl = `${process.env.NEXT_PUBLIC_CDN_URL}/icon.svg`;
-  const localIconUrl = '/icon.svg';
-  const [iconImageSrc, setIconImageSrc] = useState(cdnIconUrl);
-
-  const handleIconImageError = () => {
-    if (iconImageSrc === cdnIconUrl) {
-      setIconImageSrc(localIconUrl);
-    }
-  };
-
   // State and handler for the wheat image fallback
-  const cdnWheatUrl = `${process.env.NEXT_PUBLIC_CDN_URL}/wheat.webp`;
+  const cdnWheatUrl = cdnOrLocal('/wheat.webp');
   const localWheatUrl = '/wheat.webp';
   const [wheatImageSrc, setWheatImageSrc] = useState(cdnWheatUrl);
 
   const handleWheatImageError = () => {
-    if (wheatImageSrc === cdnWheatUrl) {
+    if (cdnBaseUrl && wheatImageSrc === cdnWheatUrl) {
       setWheatImageSrc(localWheatUrl);
     }
   };
 
   // States and handlers for the hero slider images fallback
   const [heroSliderImageSources, setHeroSliderImageSources] = useState(
-    heroImages.map(img => `${process.env.NEXT_PUBLIC_CDN_URL}${img}`)
+    heroImages.map(img => cdnOrLocal(img))
   );
 
   const handleHeroSliderImageError = (index: number) => {
     setHeroSliderImageSources(prevSources => {
       const newSources = [...prevSources];
-      const cdnUrl = `${process.env.NEXT_PUBLIC_CDN_URL}${heroImages[index]}`;
-      const localUrl = heroImages[index]; 
-      if (newSources[index] === cdnUrl) {
-        newSources[index] = localUrl;
-      }
+      const localUrl = toAssetPath(heroImages[index]); 
+      newSources[index] = localUrl;
       return newSources;
     });
   };
@@ -415,7 +409,7 @@ const Hero: React.FC = () => {
           className="flex flex-col md:flex-row md:justify-between md:items-center w-full mb-8 md:mb-12 lg:mb-16"
         >
           <div
-            className={`relative z-[100] flex ${isMobile ? "justify-between w-full items-center" : "justify-start"} mb-4 md:mb-0`}
+            className={`relative z-[100] flex ${isMobile ? "justify-center w-full items-center" : "justify-start"} mb-4 md:mb-0`}
           >
             <motion.div
               initial={{ filter: "blur(15px)", opacity: 0 }}
@@ -424,19 +418,18 @@ const Hero: React.FC = () => {
             >
               <picture>
                 {isMobile ? (
-                  // Mobile Logo Image - Using next/image with state and onError prop
                   <Image
-                    width={45}
-                    height={45}
-                    src={iconImageSrc}
-                    onError={handleIconImageError}
+                    width={280}
+                    height={80}
+                    className="w-[250px] h-auto"
+                    src={logoImageSrc}
+                    onError={handleLogoImageError}
                     alt="UCS GROUP logo"
                     priority
                     loading="eager"
                     unoptimized
                   />
                 ) : (
-                  // Desktop Logo Image - Using next/image with state and onError prop
                   <Image
                     width={250}
                     height={60}
@@ -453,7 +446,7 @@ const Hero: React.FC = () => {
             </motion.div>
             {isMobile && (
               <motion.button
-                className="text-zinc-800 z-[110]"
+                className="text-zinc-800 z-[110] absolute right-0"
                 onClick={toggleMobileMenu}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -626,7 +619,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-col w-full md:pl-4 lg:pl-8 xl:pl-12 md:pt-10 lg:pt-16 xl:pt-24">
           <div
             ref={headingRef}
-            className={`scale-[0.89] origin-top-left text-[3.2rem] sm:text-[4rem] md:text-[5.2rem] lg:text-[5.9rem] tracking-tighter leading-none text-black mt-0 flex flex-col ${isMobile ? "items-center text-center" : "items-start"}`}
+            className={`${isMobile ? "scale-100 origin-top" : "scale-[0.89] origin-top-left"} text-[3.2rem] sm:text-[4rem] md:text-[5.2rem] lg:text-[5.9rem] tracking-tighter leading-none text-black mt-[-30px] flex flex-col ${isMobile ? "items-center text-center" : "items-start"}`}
           >
             {isMobile ? (
               <>
@@ -734,12 +727,12 @@ const Hero: React.FC = () => {
             )}
           </div>
           <motion.div
-            className={`${isMobile ? "mt-1 sm:mt-2" : "mt-4 md:mt-6"} text-[1.0625rem] sm:text-[1.1875rem] md:text-[1.3125rem] lg:text-[1.5625rem] font-light tracking-tetter leading-relaxed text-gray-500 ${isMobile ? "text-center" : ""}`}
+            className={`${isMobile ? "mt-1 sm:mt-2" : "mt-4 md:mt-6"} text-[0.8625rem] sm:text-[0.9875rem] md:text-[1.1125rem] lg:text-[1.3625rem] font-light tracking-tetter leading-relaxed text-gray-500 ${isMobile ? "text-center" : ""}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-            Integrated solutions for modern agriculture<br className="hidden sm:inline" /> and next-generation construction
+            From agricultural raw materials to construction materials,<br className="hidden sm:inline" /> we offer reliable supply solutions based on quality and sustainability with our wide range of products
           </motion.div>
         </div>
       </div>
@@ -809,7 +802,7 @@ const Hero: React.FC = () => {
                         loading={index === 0 ? "eager" : "lazy"}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 50vw"
                         className="object-cover"
-                        quality={96}
+                        quality={100}
                         unoptimized
                       />
                     </motion.div>
