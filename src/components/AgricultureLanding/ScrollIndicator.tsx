@@ -11,8 +11,8 @@ export default function MouseScrollIndicator() {
   useEffect(() => {
   if (typeof window !== "undefined") {
     const isDesktop = window.innerWidth >= 1024
-    const isHomeOrAbout = window.location.pathname === "/" || window.location.pathname === "/about"
-    setIsPageAvailable(isDesktop && isHomeOrAbout)
+    const isHome = window.location.pathname === "/"
+    setIsPageAvailable(isDesktop && isHome)
 
     const handleScroll = () => {
       setHasScrolled(true)

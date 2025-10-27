@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import CallFeatureCard from "./CallFeaturesCard"
 import ExploreCard from "./ExploreCard"
-import { Phone, PhoneForwarded, FileBarChart, PieChart, DollarSign } from "lucide-react"
+import { Phone, PhoneForwarded, FileBarChart, PieChart, DollarSign, Wheat, Building2 } from "lucide-react"
 
 interface CallFeaturesProps {
   activeSection: "services" | "gallery"
@@ -20,12 +20,11 @@ const callFeaturesData = [
 ]
 
 const serviceFeaturesData = [
-  { icon: FileBarChart, title: "Service 1", description: "Description for service 1" },
-  { icon: PieChart, title: "Service 2", description: "Description for service 2" },
-  { icon: DollarSign, title: "Service 3", description: "Description for service 3" },
+  { icon: Wheat, title: "Agricultural products", description: "Reliable, cost‑effective agricultural sourcing." },
+  { icon: Building2, title: "Construction building materials", description: "Standards‑compliant materials delivered on time." },
 ]
 
-const Header: React.FC<CallFeaturesProps> = ({ activeSection, margintop = "py-14 sm:py-18" }) => {
+const Header: React.FC<CallFeaturesProps> = ({ activeSection, margintop = "pt-14 pb-0 sm:pt-18 sm:pb-[9px]" }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
   useEffect(() => {
@@ -44,7 +43,8 @@ const Header: React.FC<CallFeaturesProps> = ({ activeSection, margintop = "py-14
   }
 
   const handleExploreClick = () => {
-    console.log("Explore card clicked")
+    const el = document.getElementById('products')
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const handleDiscoverClick = () => {
@@ -63,7 +63,7 @@ const Header: React.FC<CallFeaturesProps> = ({ activeSection, margintop = "py-14
     )
   } else if (activeSection === "services") {
     content = (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 items-start mt-4 w-full max-md:max-w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 items-start mt-10 sm:mt-12 w-full max-md:max-w-full">
         {serviceFeaturesData.map((feature, index) => (
           <CallFeatureCard key={index} {...feature} onClick={() => handleFeatureClick(index)} />
         ))}
@@ -82,22 +82,22 @@ const Header: React.FC<CallFeaturesProps> = ({ activeSection, margintop = "py-14
         {" "}
         <div className={`flex flex-col items-start ${margintop} w-full bg-white ${windowWidth < 360 ? 'pt-32 custom-padding' : ''}`}>
           <div className="hidden md:flex flex-wrap gap-10 ml-5 max-w-full w-[776px]" />
-          <div className={`flex flex-col py-6 sm:py-9 px-4 sm:px-8 w-full bg-white rounded-2xl max-w-full relative z-10 ${margintop} md:mt-0}`}>
+          <div className={`flex flex-col pt-6 pb-[9px] sm:pt-9 sm:pb-[21px] px-4 sm:px-8 w-full bg-white rounded-2xl max-w-full relative z-10 ${margintop} md:mt-0}`}>
             {" "}
             <div className="flex flex-wrap justify-between items-start gap-4">
               <div className="flex flex-col flex-1 shrink basis-0 min-w-[240px] max-md:max-w-full">
-                <div className="text-sm sm:text-base text-neutral-400 max-md:max-w-full mb-2">
-                  {activeSection === "gallery" ? "Gallery" : "Services"}
-                </div>
+                {activeSection === "gallery" && (
+                  <div className="text-sm sm:text-base text-neutral-400 max-md:max-w-full mb-2">Gallery</div>
+                )}
                 {content}
               </div>
               <div className="flex flex-col w-full sm:w-80 min-w-[240px] mt-4 sm:mt-0">
                 <div className="flex flex-col w-full">
                   <div className="text-sm sm:text-base text-neutral-400 mb-2">Explore</div>
                   <ExploreCard
-                    imageSrc="/discover_image.png"
-                    title="Platform Overview"
-                    description="Take a free tour of our platform features"
+                    imageSrc="/our-main.webp"
+                    title=""
+                    description="See what we supply across agriculture and construction"
                     onClick={handleExploreClick}
                   />
                 </div>

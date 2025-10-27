@@ -19,7 +19,7 @@ const CallFeatureCard: React.FC<CallFeatureCardProps> = ({ icon: IconComponent, 
       </div>
       <div className="flex flex-col flex-1 shrink  min-w-[200px]">
         <div className="text-base text-zinc-800">{title}</div>
-        <div className="mt-1 text-xs text-neutral-600">{description}</div>
+        <div className="mt-1 text-xs text-neutral-600 opacity-80">{description}</div>
       </div>
     </button>
   );

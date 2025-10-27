@@ -200,7 +200,7 @@ const ContactPage: React.FC = () => {
     <div id="contact" className="relative w-full min-h-screen flex flex-col">
       <div className="mx-auto w-[92%] bg-amber-200 bg-opacity-80 h-[20px] sm:h-[27px] rounded-[30px_30px_0_0] sm:rounded-[50px_50px_0_0]" />
       <div className="mx-auto w-[97%] bg-amber-200 h-[25px] sm:h-[34px] rounded-[30px_30px_0_0] sm:rounded-[50px_50px_0_0]" />
-      <main className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10 w-full bg-amber-50 flex-1 rounded-[30px_30px_0_0] sm:rounded-[50px_50px_0_0]">
+      <main className="px-4 sm:px-6 md:px-8 pt-6 pb-2 sm:pt-8 sm:pb-2 md:pt-10 md:pb-2 w-full bg-amber-50 flex-1 rounded-[30px_30px_0_0] sm:rounded-[50px_50px_0_0]">
         <h1 className="mb-6 sm:mb-8 md:mb-10 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter text-center text-neutral-800">
           Get In Touch
         </h1>
@@ -226,6 +226,8 @@ const ContactPage: React.FC = () => {
           </div>
         </div>
       </main>
+      {/* Wider soft fade at the bottom to blend into footer (match footer base color to avoid seam) */}
+      <div aria-hidden className="w-full -mt-px h-6 sm:h-8 md:h-10 bg-gradient-to-b from-amber-50/70 to-white pointer-events-none" />
     </div>
   )
 }

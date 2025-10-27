@@ -68,11 +68,8 @@ const merryweather = Merriweather({
 });
 
 export const metadata: Metadata = {
-  title: {
-    template: "%s | UCS Agriculture",
-    default: "UCS Agriculture",
-  },
-  description: "UCS Agriculture - Sustainable farming solutions",
+  title: "UCS GROUP EXPORT-İMPORT | Reliable and Affordable Supply from Agriculture",
+  description: "Reliable and Affordable Supply from Agriculture",
   icons: {
     icon: "/icon.svg",
   },

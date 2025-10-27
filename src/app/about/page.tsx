@@ -1,13 +1,12 @@
 "use client"
 import type * as React from "react"
 import AboutUs from "@/components/AgricultureLanding/AboutUs"
-import OurMission from "@/components/AgricultureLanding/OurMission"
 import Header from "@/components/AgricultureLanding/Header"
 import { AnimatePresence, motion } from "framer-motion"
 import { useState, useRef, useEffect } from "react"
 import { ChevronDown, Settings, Grid, Contact } from "lucide-react"
 import Lenis from "@studio-freight/lenis"
-import Documents from "@/components/AgricultureLanding/Documents"
+// Documents section removed
 
 const navItems = [
   {
@@ -44,10 +43,7 @@ const About: React.FC = () => {
   const navbarRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const navItemRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const rawCdnBase = process.env.NEXT_PUBLIC_CDN_URL || ""
-  const cdnBase = rawCdnBase.endsWith("/") ? rawCdnBase.slice(0, -1) : rawCdnBase
-  const iconSrc = cdnBase ? `${cdnBase}/icon.svg` : "/icon.svg"
-  const logoSrc = cdnBase ? `${cdnBase}/logo.webp` : "/logo.webp"
+  const logoSrc = "/logo.webp"
 
   useEffect(() => {
     const lenis = new Lenis()
@@ -56,6 +52,12 @@ const About: React.FC = () => {
       requestAnimationFrame(raf)
     }
     requestAnimationFrame(raf)
+    // Lock body scroll on About page
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prevOverflow
+    }
   }, [])
 
   useEffect(() => {
@@ -133,13 +135,13 @@ const About: React.FC = () => {
   }
 
   return (
-    <main className="bg-white pt-4">
+    <main className="bg-gradient-to-b from-[#FEF4CF] via-[#FEF7DC] to-white pt-0 h-screen overflow-hidden">
       <div
         ref={navbarRef}
         className="flex flex-col md:flex-row md:justify-between md:items-center px-4 md:px-8 max-w-7xl mx-auto"
       >
         <motion.div
-          className="relative z-[100] flex justify-center md:justify-start w-full md:w-auto mb-5 md:mb-0 cursor-pointer"
+          className="relative z-[100] flex justify-center md:justify-start w-full md:w-auto mb-2 md:mb-0 cursor-pointer"
           variants={logoVariants}
           initial="initial"
           animate="animate"
@@ -148,31 +150,12 @@ const About: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <picture>
-            {isMobile ? (
-              <img
-                className="w-[15vw] h-[8vh]"
-                src={iconSrc}
-                onError={(e) => {
-                  if (cdnBase) {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/icon.svg";
-                  }
-                }}
-                alt="UCS GROUP logo"
-              />
-            ) : (
-              <img
-                className="w-[15vw] h-[8vh]"
-                src={logoSrc}
-                onError={(e) => {
-                  if (cdnBase) {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/logo.webp";
-                  }
-                }}
-                alt="UCS GROUP logo"
-              />
-            )}
+            <img
+              className="w-[180px] md:w-[220px] lg:w-[250px] h-auto"
+              src={logoSrc}
+              alt="UCS GROUP logo"
+              loading="eager"
+            />
           </picture>
         </motion.div>
 
@@ -279,8 +262,6 @@ const About: React.FC = () => {
         </AnimatePresence>
       )}
       <AboutUs />
-      <OurMission />
-      <Documents />
     </main>
   )
 }

@@ -135,8 +135,9 @@ const OurProducts: React.FC = () => {
   }, [])
   return (
     <motion.div
-      ref={sectionRef}
-      className="flex flex-col items-center justify-center pb-20 rounded-none max-md:pb-24 mt-0"
+      id="products"
+       ref={sectionRef}
+       className="flex flex-col items-center justify-center pb-20 rounded-none max-md:pb-24 mt-0 scroll-mt-[15px]"
       style={{ zoom: "100%" }}
     >
       <div className="self-center mt-0 md:mt-10 w-full max-w-[1440px]">

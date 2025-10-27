@@ -6,81 +6,69 @@ const AboutUs: React.FC = () => {
   return (
     <motion.section
       id="about"
-      className="overflow-hidden px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 py-8 md:py-16 bg-white"
+      className="w-full bg-gradient-to-b from-[#FEF4CF] via-[#FEF7DC] to-white px-4 sm:px-6 md:px-8 pt-2 md:pt-4 pb-4 md:pb-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.4 }}
     >
-      <header className="px-4 sm:px-8 md:px-16 py-8 md:py-14 text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold leading-none text-center text-lime-700 bg-lime-50 rounded-[20px] md:rounded-[44px]">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+      <div className="max-w-[1200px] mx-auto">
+        <motion.div
+          className="px-1 sm:px-2 md:px-0"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
         >
-          Who we are?
-        </motion.h1>
-      </header>
-
-      <motion.article
-        className="flex flex-col px-8 sm:px-12 pt-10 md:pt-14 pb-12 md:pb-24 mt-6 md:mt-9 rounded-[20px] md:rounded-[44px]"
-        style={{ backgroundColor: "#4d7c0f" }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="self-start text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.2] md:leading-[1.3] lg:leading-[64px] mb-8 md:mb-14"
-        >
-          <span
-            style={{
-              fontWeight: 300,
-              fontSize: "clamp(24px, 5vw, 48px)",
-              color: "rgba(255, 255, 255, 0.85)",
-            }}
-          >
-            We are
-          </span>
-          <br />
-          UCS Group
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="flex flex-col text-xl md:text-2xl font-light leading-loose text-white"
-          >
-            <div className="h-full flex flex-col justify-between">
-              <p>
-                Our company is a new venture operating in the field of <strong className="text-lime-200">international trade</strong>, establishing a reliable supply network that connects producers directly with consumers.
-              </p>
-              <p className="mt-8">
-                We adopt a business model that <strong className="text-lime-200">minimizes intermediaries</strong> to offer our customers the highest quality agricultural products at competitive prices.
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+            <div className="mt-[80px]">
+              <motion.h1
+                className="font-merryweather text-[2.8rem] sm:text-[3.4rem] md:text-[4.2rem] lg:text-[4.9rem] tracking-normal leading-snug text-neutral-900"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.45 }}
+              >
+                <span className="block font-light text-[1rem] sm:text-[1.24rem] md:text-[1.52rem] lg:text-[1.76rem] leading-none tracking-[0.01em] mb-0">Who we are?</span>
+                <span className="block -mt-1 font-bold font-poppins text-[1.96rem] sm:text-[2.38rem] md:text-[2.94rem] lg:text-[3.43rem]">UCS Group</span>
+              </motion.h1>
+              <motion.p
+                className="mt-4 sm:mt-6 text-[1.0625rem] sm:text-[1.1875rem] md:text-[1.3125rem] lg:text-[1.3625rem] text-neutral-600 leading-relaxed"
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.45 }}
+              >
+                We connect producers to global demand with reliable, cost‑effective supply across agriculture and construction, built on transparency, quality and sustainability.
+              </motion.p>
+              <motion.p
+                className="mt-4 text-neutral-600 text-[1.0625rem] sm:text-[1.1875rem] leading-relaxed"
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.45, delay: 0.05 }}
+              >
+                Our model minimizes intermediaries, ensures standards‑compliant sourcing, and delivers on‑time with full quality assurance.
+              </motion.p>
             </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            className="flex flex-col text-xl md:text-2xl font-light leading-loose text-white"
-          >
-            <div className="h-full flex flex-col justify-between">
-              <p>
-                Our supply processes are built on sourcing directly from production points, optimizing costs, and providing <strong className="text-lime-200">sustainable price advantages</strong>.
-              </p>
-              <p className="mt-8">
-                Our business model is founded on <strong className="text-lime-200">transparency</strong>, sustainability, and long-term partnerships, with all operations following international standards.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </motion.article>
+            <motion.div
+              className="relative w-full justify-self-stretch aspect-[1/1] rounded-3xl overflow-hidden mt-4 md:mt-6"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5 }}
+            >
+              <img
+                src="/about-who.webp"
+                alt="UCS Group overview"
+                className="w-full h-full object-cover object-center"
+                style={{ filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.12))" }}
+                loading="lazy"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
     </motion.section>
   );
 };

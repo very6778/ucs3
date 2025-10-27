@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 
 interface ExploreCardProps {
   imageSrc: string;
-  title: string;
+  title?: string;
   description: string;
   onClick: () => void;
 }
@@ -28,11 +28,13 @@ const ExploreCard: React.FC<ExploreCardProps> = ({ imageSrc, title, description,
         className="object-cover w-full rounded-3xl aspect-[1.5]"
       />
       <div className="flex z-10 flex-col mt-2 max-w-full ">
-        <div className="text-base font-medium text-zinc-800">{title}</div>
+        {title ? (
+          <div className="text-base font-medium text-zinc-800">{title}</div>
+        ) : null}
         <div className="mt-1 text-xs text-neutral-600">{description}</div>
       </div>
       <div className="flex items-center pt-2 text-neutral-600">
-        <span className="self-stretch my-auto">Book a Demo</span>
+        <span className="self-stretch my-auto">Supply overview</span>
         <ChevronRight className="ml-2 w-5 h-5" />
       </div>
     </button>
