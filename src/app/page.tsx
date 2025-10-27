@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import dynamic from 'next/dynamic';
 import Hero from "../components/AgricultureLanding/Hero";
 const DiscoverSection = dynamic(() => import('@/components/AgricultureLanding/OurProduct'));
@@ -11,10 +10,6 @@ import OurMission from "@/components/AgricultureLanding/OurMissionHome";
 const Footer = dynamic(() => import('@/components/AgricultureLanding/Footer'));
 import { getLocalGalleryData } from "@/lib/getLocalGalleryData";
 
-export const metadata: Metadata = {
-  title: "Home | UCS Agriculture",
-  description: "Welcome to UCS Agriculture - Sustainable farming solutions",
-};
 
 export default async function HomePage() {
   const galleryData = await getLocalGalleryData();
