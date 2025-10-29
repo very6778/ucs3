@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   const logoSrc = "/logo.webp";
 
   return (
-    <footer className="flex flex-col items-center self-stretch w-full bg-[linear-gradient(to_top,rgba(251,191,36,0.3825)_0%,rgba(254,243,199,0.19125)_47%,rgba(255,255,255,1)_70%)]">
+    <footer className="flex flex-col items-center self-stretch w-full -mt-[30px] bg-[linear-gradient(to_top,rgba(251,191,36,0.3825)_0%,rgba(254,243,199,0.19125)_47%,rgba(255,255,255,1)_70%)]">
       {/* Top fade removed to avoid double-gradient seam; contact section handles the blend */}
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-0 md:pt-0 pb-1">
         <div className="flex flex-col w-full max-w-[1226px] mx-auto">
