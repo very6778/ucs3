@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="flex flex-col items-center self-stretch w-full bg-[linear-gradient(to_top,rgba(251,191,36,0.3825)_0%,rgba(254,243,199,0.19125)_47%,rgba(255,255,255,1)_70%)]">
       {/* Top fade removed to avoid double-gradient seam; contact section handles the blend */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-0 md:pt-4 pb-6">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-0 md:pt-0 pb-1">
         <div className="flex flex-col w-full max-w-[1226px] mx-auto">
           <div className="flex flex-col md:flex-row md:justify-center md:items-center gap-8">
             {/* Logo */}
@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
                 loading="lazy"
                 src={logoSrc}
                 alt="UCS GROUP logo"
-                className="object-contain shrink-0 aspect-square w-[112px] md:w-[28vw]"
+                className="object-contain shrink-0 aspect-square w-[90px] md:w-[23vw]"
               />
             </div>
 
@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="self-center mt-10 md:mt-14 text-sm leading-6 text-center text-neutral-700">
+        <div className="self-center mt-2 md:mt-3 text-sm leading-6 text-center text-neutral-700">
           <span>© Copyright </span>
           <span className="font-bold">UCS GROUP</span>
           <span>. All Rights Reserved</span>
