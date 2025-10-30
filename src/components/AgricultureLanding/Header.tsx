@@ -76,7 +76,7 @@ const Header: React.FC<CallFeaturesProps> = ({ activeSection, margintop = "pt-14
   }
 
   return (
-    <div className="flex justify-center w-full z-50">
+    <div className="flex justify-center w-full relative">
       {" "}
       <div className="flex flex-col rounded-none max-w-[1200px] w-full px-4 sm:px-6 lg:px-8 relative">
         {" "}

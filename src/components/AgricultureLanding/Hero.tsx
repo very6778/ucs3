@@ -538,7 +538,7 @@ const Hero: React.FC = () => {
                 />
                 <motion.div
                   ref={dropdownRef}
-                  className="absolute left-0 w-screen bg-white z-50 top-0"
+                className="relative w-full bg-white z-50 mt-6"
                   onMouseLeave={() => {
                     setActiveDropdown(null)
                     setActiveSection(null)
@@ -569,7 +569,7 @@ const Hero: React.FC = () => {
               />
               <motion.div
                 ref={dropdownRef}
-                className="absolute left-0 w-screen bg-white z-50 top-0"
+                className="relative w-full bg-white z-50 mt-20"
                 onMouseLeave={() => {
                   setActiveDropdown(null)
                   setActiveSection(null)
