@@ -331,6 +331,7 @@ const Hero: React.FC = () => {
     closed: {
       height: 0,
       opacity: 0,
+      y: -16,
       transition: {
         duration: 0.3,
         opacity: { duration: 0.2 },
@@ -340,6 +341,7 @@ const Hero: React.FC = () => {
     open: {
       height: "auto",
       opacity: 1,
+      y: 0,
       transition: {
         duration: 0.3,
         opacity: { duration: 0.3, delay: 0.1 },
@@ -485,7 +487,7 @@ const Hero: React.FC = () => {
         <AnimatePresence>
           {isMobile && mobileMenuOpen && (
             <motion.nav
-              className="flex flex-wrap justify-center gap-2 w-full mb-6 overflow-hidden"
+              className="flex flex-wrap justify-center gap-2 w-full mb-3 overflow-hidden bg-white sticky top-[72px] z-40 py-1"
               variants={mobileMenuVariants}
               initial="closed"
               animate="open"
@@ -538,7 +540,7 @@ const Hero: React.FC = () => {
                 />
                 <motion.div
                   ref={dropdownRef}
-                className="relative w-full bg-white z-50 mt-6"
+                  className="absolute left-0 w-screen bg-white z-50 top-0"
                   onMouseLeave={() => {
                     setActiveDropdown(null)
                     setActiveSection(null)
@@ -569,7 +571,7 @@ const Hero: React.FC = () => {
               />
               <motion.div
                 ref={dropdownRef}
-                className="relative w-full bg-white z-50 mt-20"
+                className="absolute left-0 w-screen bg-white z-50 top-0"
                 onMouseLeave={() => {
                   setActiveDropdown(null)
                   setActiveSection(null)
@@ -584,7 +586,11 @@ const Hero: React.FC = () => {
             </>
           )}
         </AnimatePresence>
-        <div className="flex flex-col w-full md:pl-4 lg:pl-8 xl:pl-12 md:pt-10 lg:pt-16 xl:pt-24">
+        <motion.div
+          className="flex flex-col w-full md:pl-4 lg:pl-8 xl:pl-12 md:pt-10 lg:pt-16 xl:pt-24"
+          animate={{ marginTop: isMobile && mobileMenuOpen ? 48 : 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
           <div
             ref={headingRef}
             className={`${isMobile ? "scale-100 origin-top" : "scale-[0.89] origin-top-left"} text-[3.2rem] sm:text-[4rem] md:text-[5.2rem] lg:text-[5.9rem] tracking-tighter leading-none text-black mt-[-30px] flex flex-col ${isMobile ? "items-center text-center" : "items-start"}`}
@@ -634,7 +640,7 @@ const Hero: React.FC = () => {
           >
             From agricultural raw materials to construction materials,<br className="hidden sm:inline" /> we offer reliable supply solutions based on quality and sustainability with our wide range of products
           </motion.div>
-        </div>
+        </motion.div>
       </div>
       <div className="flex flex-col w-full md:w-[44%] relative md:-mt-2.5">
         <div

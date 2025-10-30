@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
                 loading="lazy"
                 src={logoSrc}
                 alt="UCS GROUP logo"
-                className="object-contain shrink-0 aspect-square w-[90px] md:w-[23vw]"
+                className="object-contain shrink-0 aspect-square w-[90px] sm:w-[100px] md:w-[120px] lg:w-[140px]"
               />
             </div>
 
