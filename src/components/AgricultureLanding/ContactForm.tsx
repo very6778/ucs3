@@ -227,7 +227,7 @@ const ContactPage: React.FC = () => {
         </div>
       </main>
       {/* Wider soft fade at the bottom to blend into footer (match footer base color to avoid seam) */}
-      <div aria-hidden className="w-full -mt-px h-6 sm:h-8 md:h-10 bg-gradient-to-b from-amber-50/70 to-white pointer-events-none" />
+      <div aria-hidden className="w-full -mt-px h-6 sm:h-8 md:h-10 bg-gradient-to-b from-amber-50/[0.56] to-white pointer-events-none" />
     </div>
   )
 }
