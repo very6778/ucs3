@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
                 No: 2E İç Kapı No: 331 Ataşehir / İstanbul
               </div>
               <div className="mt-4 leading-6 text-center md:text-left">
-                Phone: +212 559 9290
+                Phone: +90 850 305 6742
               </div>
               <div className="mt-4 leading-6 text-center md:text-left">
                 Email: info@ucscogroup.com

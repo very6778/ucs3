@@ -20,7 +20,7 @@ const AboutUs: React.FC = () => {
           transition={{ duration: 0.45, ease: "easeOut" }}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-            <div className="mt-[80px]">
+            <div className="mt-6 md:mt-[80px]">
               <motion.h1
                 className="font-merryweather text-[2.8rem] sm:text-[3.4rem] md:text-[4.2rem] lg:text-[4.9rem] tracking-normal leading-snug text-neutral-900"
                 initial={{ opacity: 0 }}
@@ -52,7 +52,7 @@ const AboutUs: React.FC = () => {
             </div>
 
             <motion.div
-              className="relative w-full justify-self-stretch aspect-[1/1] rounded-3xl overflow-hidden mt-4 md:mt-6"
+              className="relative w-full justify-self-stretch aspect-[1/1] rounded-[32px] overflow-hidden mt-4 md:mt-6 border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, amount: 0.4 }}
@@ -62,7 +62,7 @@ const AboutUs: React.FC = () => {
                 src="/about-who.webp"
                 alt="UCS Group overview"
                 className="w-full h-full object-cover object-center"
-                style={{ filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.12))" }}
+                style={{ filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.12))", borderRadius: "inherit" }}
                 loading="lazy"
               />
             </motion.div>

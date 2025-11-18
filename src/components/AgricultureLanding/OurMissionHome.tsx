@@ -546,7 +546,7 @@ const MissionSection: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-black text-lg">Özcan Uca</p>
+                    <p className="font-medium text-black text-lg">Can Uca</p>
                     <p className="text-base text-gray-500">CEO</p>
                   </div>
                 </footer>
