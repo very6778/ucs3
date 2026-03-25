@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
 import Hero from "../components/AgricultureLanding/Hero";
+
+export const revalidate = 3600; // ISR: her 1 saatte yeniden oluştur
 const DiscoverSection = dynamic(() => import('@/components/AgricultureLanding/OurProduct'));
 const Gallery = dynamic(() => import('@/components/AgricultureLanding/Gallery/Gallery'));
 const OperationMap = dynamic(() => import('../components/AgricultureLanding/OperationMap'));
